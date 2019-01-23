@@ -1,14 +1,15 @@
+const tools = require('./global-tools');
 module.exports = {
     trim: function (value) {
-        return typeof value === 'string' ? value.trim() : value
+        tools.typeCheck('string', value);
+        return value.trim()
     },
     priceToFloat: function (value) {
-        return typeof value === 'string' ? parseFloat(value.replace(',', '.').replace(/[^0-9.]/g, '')) : value
+        tools.typeCheck('string', value);
+        return parseFloat(value.replace(',', '.').replace(/[^0-9.]/g, ''))
     },
     extractDate: function (value) {
-        if (typeof value !== 'string') {
-            return value
-        }
+        tools.typeCheck('string', value);
 
         let dates = [];
         value.replace(/([0-9]{2}\/[0-9]{2}\/[0-9]{4})/g, async function (match, p1) {
@@ -19,7 +20,7 @@ module.exports = {
     },
     formatDate: function (value) {
         if (Array.isArray(value) === false) {
-            return value;
+            tools.customError('array expected!', 400)
         }
 
         let i = 0;
@@ -34,18 +35,22 @@ module.exports = {
         return dates;
     },
     formatHour: function (value) {
-        return typeof value === 'string' ? value.replace('h', ':') : value
+        tools.typeCheck('string', value);
+        return value.replace('h', ':')
     },
     passengersAge: function (value) {
-        return typeof value === 'string' ? value.replace(/(.*)(\(.*\))/, '$2') : value
+        tools.typeCheck('string', value);
+        return value.replace(/(.*)(\(.*\))/, '$2')
     },
     ticketType: function (value) {
+        tools.typeCheck('string', value);
         if (value.indexOf('Billet échangeable')) {
             return 'échangeable';
         }
         return value;
     },
     extractNumber: function (value) {
+        tools.typeCheck('string', value);
         let num = value.replace(/[^0-9]/g, '');
         return parseInt(num);
     }
